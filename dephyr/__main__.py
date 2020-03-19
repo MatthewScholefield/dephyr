@@ -7,15 +7,15 @@ from dephyr.relation import Relation, Rule
 
 
 def format_key(key: set):
-    return '{{{}}}'.format(', '.join(sorted(key)).upper())
+    return ''.join(sorted(key)).upper()
 
 
 def format_rules(rules: List[Rule]) -> str:
     rule_strings = [
-        (format_key(rule.requires), format_key(rule.creates))
+        (len(rule.requires), format_key(rule.requires), format_key(rule.creates))
         for rule in rules
     ]
-    return '\n'.join('{} -> {}'.format(a, b) for a, b in sorted(rule_strings))
+    return '\n'.join('{} -> {}'.format(a, b) for _, a, b in sorted(rule_strings))
 
 
 def main():
@@ -71,7 +71,7 @@ def main():
         data = []
         for relation in relations:
             data.append((format_key(relation.elements), format_rules(relation.rules)))
-        for elements, rules in data:
+        for elements, rules in sorted(data):
             print(elements)
             print(rules)
             print()
